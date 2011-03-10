@@ -1,10 +1,13 @@
 import logging
-import logging.handlers
+from handler import PickleHttpHandler
 
-log = logging.getLogger('SPAgent')
-log.setLevel( logging.INFO )
+def getLoger(name):
+	log = logging.getLogger(name)
+	log.setLevel( logging.DEBUG )
+	log.addHandler( PickleHttpHandler( 'localhost:8000', 'log', method = 'POST' ) )
+	return log
 
-log.addHandler( logging.handlers.HTTPHandler( 'localhost:8000', 'log' ) )
+	
+getLoger("WebReports.log").info( 'Mess: %s, %i','str', 5)
+getLoger("SpBrowserBroker.log").debug( 'Mess: %s, %i','str', 5)
 
-
-log.info( '5' )
