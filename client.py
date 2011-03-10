@@ -8,6 +8,6 @@ def getLoger(name):
 	return log
 
 	
-getLoger("WebReports.log").info( 'Mess: %s, %i','str', 5)
-getLoger("SpBrowserBroker.log").debug( 'Mess: %s, %i','str', 5)
+getLoger("file1.log").info( 'Mess: %s, %i','str', 5)
+getLoger("file2.log").debug( 'Mess: %s, %i','str', 5)
 
