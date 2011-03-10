@@ -9,7 +9,7 @@ class Root:
 	def log(self,*args,**kwargs):
 		rec = kwargs[ 'record' ]
 		import pickle
-		record = pickle.loads( str(rec) )
+		record = pickle.loads( rec )
 		cherrypy.engine.log_cache.put(record)
 		return 'Done'
 import ini
