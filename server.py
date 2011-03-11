@@ -15,17 +15,22 @@ class Root:
 import ini
 import os
 svc_path = os.path.join(os.path.dirname(__file__), 'httpservice.conf')
+def getConfigValue(name):
+	return ini.read( svc_path, 'default',name)
 
 def Register():
 	from logging.handlers import RotatingFileHandler
 	from logging import Formatter
 	
 	h = {}
-	formatter = Formatter("%(asctime)s [%(process)s:%(thread)s] ** %(levelname)s ** %(msg)s")
-	logsnames = ini.read( svc_path, 'default','lognames')
+	formatter = Formatter("%(asctime)s\t[%(process)s:%(thread)s] ** %(levelname)s ** %(message)s")
+	logsnames = getConfigValue('lognames')
+	qsize = getConfigValue('qsize')
+	rotation_bytes = getConfigValue('rotation_bytes')
+	rotation_count = getConfigValue('rotation_count')
 
 	for i in logsnames.split(","):
-		h[i] = RotatingFileHandler(os.path.join(os.path.dirname(__file__), i), maxBytes=5242880, backupCount=500)
+		h[i] = RotatingFileHandler(os.path.join(os.path.dirname(__file__), i), maxBytes=rotation_bytes, backupCount=rotation_count)
 		h[i].formatter = formatter
 
 	def write():
@@ -41,7 +46,7 @@ def Register():
 	pq = plugins.Monitor(cherrypy.engine,write,3)	
 	pq.subscribe()	
 	
-	cherrypy.engine.log_cache = Queue()
+	cherrypy.engine.log_cache = Queue(maxsize = qsize)
 	conf_path = os.path.join(os.path.dirname(__file__), "config.txt")
 	cherrypy.config.update(conf_path)
 	app = cherrypy.quickstart( Root() )
@@ -59,7 +64,7 @@ class HTTPLogServiceHelper(ServiceHelperBase):
 	File = __file__	
 
 if __name__ == '__main__':
-	if sys.argv[1] == "installservice":
+	if sys.argv.__len__() > 1 and sys.argv[1] == "installservice":
 		service = HTTPLogServiceHelper()
 		service.Stop()
 		service.Remove()
