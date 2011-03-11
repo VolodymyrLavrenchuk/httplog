@@ -15,3 +15,11 @@ def read( path, section, option):
 	conf = RawConfigParser()
 	conf.read( path )
 	return conf.get( section, option )
+	
+def set( path, section, option, value):
+	conf = RawConfigParser()
+	conf.read( path )
+	conf.set( section, option, value )
+	configfile = open(path, 'w')
+	conf.write(configfile)
+	configfile.close()
