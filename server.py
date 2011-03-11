@@ -25,7 +25,7 @@ def Register():
 	logsnames = ini.read( svc_path, 'default','lognames')
 
 	for i in logsnames.split(","):
-		h[i] = RotatingFileHandler(os.path.join(os.path.dirname(__file__), i), maxBytes=100 * 1024, backupCount=5)
+		h[i] = RotatingFileHandler(os.path.join(os.path.dirname(__file__), i), maxBytes=5242880, backupCount=500)
 		h[i].formatter = formatter
 
 	def write():
