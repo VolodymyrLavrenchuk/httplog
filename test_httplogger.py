@@ -62,7 +62,7 @@ def setup():
 	
 def teardown():
 	from distutils import file_util
-	#file_util.copy_file("httpservice.bak","httpservice.conf")
+	file_util.copy_file("httpservice.bak","httpservice.conf")
 	
 def testThreeLogFiles():
 	work_cl = [ getLoger(i) for i in logs[:3] ]
